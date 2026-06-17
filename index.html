@@ -2753,8 +2753,7 @@ function openStudentModal(student){
         <div style="font-size:12.5px;color:var(--muted);margin-top:4px">${escHTML(sid)}${student.grade!=null?` · <b style="color:${headerColor}">${student.grade}등급</b>`:''}${student.rank!=null?` · 석차 ${student.rank}등 / ${totalN}명`:''}</div>
       </div>
       <div style="text-align:right">
-        <div style="font-size:11px;color:var(--muted);margin-bottom:2px">총점</div>
-        <div style="font-size:24px;font-weight:800;color:${headerColor};letter-spacing:-.02em">${student.total!=null?student.total:'-'}<span style="font-size:13px;font-weight:600;color:var(--muted)">점</span></div>
+        <div style="font-size:24px;font-weight:800;color:${headerColor};letter-spacing:-.02em;margin-top:4px">${student.total!=null?student.total:'-'}<span style="font-size:13px;font-weight:600;color:var(--muted)">점</span></div>
       </div>
     </div>
     <div style="display:grid;grid-template-columns:repeat(5, 1fr);gap:6px;margin:14px 0 12px">
