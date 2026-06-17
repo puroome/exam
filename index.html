@@ -1232,7 +1232,7 @@ function parseExamInfo(rows){
   let m;
   if((m = text.match(/([1-3])\s*학년/))) info.grade = +m[1];
   const semester = (m = text.match(/(\d)\s*학기/)) ? (m[1]+'학기') : '';
-  const exam = (m = text.match(/(중간고사|기말고사|수행평가|쪽지시험|\d\s*차\s*시험)/)) ? m[1].replace(/\s+/g,' ').trim() : '';
+  const exam = (m = text.match(/(중간고사|기말고사|수행평가|쪽지시험|\d\s*차\s*시험)/)) ? m[1].replace(/\s+/g,'') : '';
   info.examName = [semester, exam].filter(Boolean).join(' ');
   // 과목: 콜론(:) 다음 괄호 전 텍스트, 없으면 "(N)" 앞 마지막 의미있는 단어
   if((m = text.match(/:\s*([^():]+?)\s*\(/))) info.subject = m[1].trim();
