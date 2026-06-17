@@ -623,25 +623,21 @@ body:not(.printing-report) header,
     </div>
     <div class="row">
       <div style="flex:2">
-        <label>교과목별학생답정오표 (복수학급 선택 가능)</label>
+        <label>교과목별학생답정오표 (.xlsx, .xls) — 복수학급 선택 가능</label>
         <input type="file" id="file" accept=".xlsx,.xls" multiple>
         <div id="fileList" style="margin-top:6px;font-size:12px;color:var(--muted)"></div>
       </div>
       <div>
         <label>학년</label>
-        <select id="grade">
-          <option value="1">1학년 (5등급제)</option>
-          <option value="2">2학년 (5등급제)</option>
-          <option value="3">3학년 (9등급제)</option>
-        </select>
+        <input type="text" id="grade" readonly placeholder="" style="background:#f8faff;color:var(--ink);cursor:not-allowed">
       </div>
       <div>
         <label>과목명</label>
-        <input type="text" id="subject" placeholder="예: 공통영어1">
+        <input type="text" id="subject" readonly placeholder="" style="background:#f8faff;color:var(--ink);cursor:not-allowed">
       </div>
       <div>
         <label>시험명</label>
-        <input type="text" id="examName" placeholder="예: 1학기 1차시험">
+        <input type="text" id="examName" readonly placeholder="" style="background:#f8faff;color:var(--ink);cursor:not-allowed">
       </div>
     </div>
 
