@@ -322,8 +322,7 @@
   @media(prefers-reduced-motion:reduce){
     *,*::before,*::after{animation-duration:.01ms !important;transition-duration:.01ms !important}
   }
-  @media(max-width:800px){.charts{grid-template-columns:1fr}.chart-box.full{grid-column:auto} .ppr-grid, .cuts-grid, .intent-grid, .std-grid{grid-template-columns:1fr !important}}
-  .cuts-mode.active{background:var(--pri-50)!important;border-color:var(--pri)!important;color:var(--pri-deep)!important}
+  @media(max-width:800px){.charts{grid-template-columns:1fr}.chart-box.full{grid-column:auto} .ppr-grid, .intent-grid, .std-grid{grid-template-columns:1fr !important}}
 
   /* 지표 도움말 칩 */
   .tip{
@@ -668,7 +667,6 @@ body:not(.printing-report) header,
     <nav id="resultNav" class="no-print">
       <button class="nav-link" data-target="navSummary">📊 요약</button>
       <button class="nav-link" data-target="navDist">🎯 점수·등급 분포</button>
-      <button class="nav-link" data-target="navSim">⚖ 성취도 분할점수 시뮬</button>
       <button class="nav-link" data-target="navItem">📝 문항 분석</button>
       <button class="nav-link" data-target="navMatrix">🧮 매트릭스</button>
       <button class="nav-link neis-only" data-target="navIntent" style="display:none">🎯 의도 vs 실제</button>
@@ -694,33 +692,6 @@ body:not(.printing-report) header,
         <table id="gradeTable"><thead><tr>
           <th>등급</th><th>인원</th><th>비율(%)</th><th>최저점</th><th>최고점</th>
         </tr></thead><tbody></tbody></table>
-      </div>
-    </section>
-
-    <section class="card" id="navSim">
-      <h2>성취도 분할점수 시뮬레이터<span class="tip" data-tip="성취평가제 분할점수(컷)를 바꿔가며 A~E·I 분포가 어떻게 달라지는지 시뮬레이션.&#10;·고정: 90/80/70/60/40 표준&#10;·정규분포 추천: 데이터 분포 기반 자동 산출(A 10·B 25·C 30·D 25·E 10%)&#10;·상위권 확대: A 비율을 15%로 확대&#10;·E컷은 성취평가제 표준에 따라 40 권장">?</span></h2>
-      <p style="color:var(--muted);margin:0 0 12px;font-size:13px">분할점수를 바꿔 성취도(A~E·I) 분포가 어떻게 달라지는지 실시간으로 확인 · 정규분포 추천도 자동 계산</p>
-      <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap">
-        <button class="ghost cuts-mode" data-mode="fixed" style="background:var(--pri-50);border-color:var(--pri);color:var(--pri-deep)">고정 (90/80/70/60/40)</button>
-        <button class="ghost cuts-mode" data-mode="recommend">정규분포 추천 (10·25·30·25·10)</button>
-        <button class="ghost cuts-mode" data-mode="balanced">상위권 확대 (15·25·25·25·10)</button>
-        <button class="ghost cuts-mode" data-mode="custom">직접 입력 ↓</button>
-      </div>
-      <div style="display:flex;gap:10px;align-items:end;flex-wrap:wrap;padding:10px 12px;background:#f8faff;border:1px solid var(--line);border-radius:10px">
-        <div style="flex:0 0 auto"><label>A 컷 ≥</label><input type="number" id="cutA" value="90" min="0" max="100" step="0.1" style="width:80px"></div>
-        <div style="flex:0 0 auto"><label>B 컷 ≥</label><input type="number" id="cutB" value="80" min="0" max="100" step="0.1" style="width:80px"></div>
-        <div style="flex:0 0 auto"><label>C 컷 ≥</label><input type="number" id="cutC" value="70" min="0" max="100" step="0.1" style="width:80px"></div>
-        <div style="flex:0 0 auto"><label>D 컷 ≥</label><input type="number" id="cutD" value="60" min="0" max="100" step="0.1" style="width:80px"></div>
-        <div style="flex:0 0 auto"><label>E 컷 ≥</label><input type="number" id="cutE" value="40" min="0" max="100" step="0.1" style="width:80px"></div>
-        <button id="cutsApply" style="padding:9px 18px">시뮬레이션 적용</button>
-      </div>
-      <div style="display:grid;grid-template-columns:1.4fr 1fr;gap:16px;margin-top:14px" class="cuts-grid">
-        <div class="chart-box" style="height:300px"><canvas id="cutsChart"></canvas></div>
-        <div>
-          <table id="cutsCompTable" style="font-size:12.5px"></table>
-          <div id="cutsNote"></div>
-          <p style="font-size:11.5px;color:var(--muted);margin:8px 0 0">※ 미도달(I) 기준은 40점으로 고정 권장 (성취평가제 표준) · 컷은 항상 A ≥ B ≥ C ≥ D ≥ E 순서 유지</p>
-        </div>
       </div>
     </section>
 
@@ -1455,7 +1426,6 @@ const valueLabel = {
   }
 };
 
-// ---- 분할점수 시뮬레이터 ----
 let _lastStudents = null;
 
 // 🔧 HTML 저장 후 다시 열 때, snapshot script가 호출하는 진입점.
@@ -1498,12 +1468,10 @@ window.__restoreExamLensSnapshot = function(snap){
       try{ renderMatrix(lastItems, _lastStudents); }catch(e){ console.warn('renderMatrix', e); }
       try{ renderDistribution(lastItems, _lastStudents); }catch(e){ console.warn('renderDistribution', e); }
       try{ $('review').innerHTML = buildReview(stats, lastItems, gd, grade, subject, examName, _lastStudents, alpha); }catch(e){ console.warn('buildReview', e); }
-      try{ setupCutsSimulator(_lastStudents); }catch(e){ console.warn('setupCutsSimulator', e); }
       try{ makeSortable($('itemTable')); }catch(e){}
       try{ makeSortable($('studentTable')); }catch(e){}
       try{ makeSortable($('gradeTable')); }catch(e){}
       try{ makeSortable($('distTable')); }catch(e){}
-      try{ makeSortable($('cutsCompTable')); }catch(e){}
       try{ makeSortable($('pprTable')); }catch(e){}
       const _result = document.getElementById('result');
       if(_result) _result.classList.remove('hidden');
@@ -1511,167 +1479,6 @@ window.__restoreExamLensSnapshot = function(snap){
     console.log('[Exam-Lens] 스냅샷 복원 완료: 학생 ' + (_lastStudents||[]).length + '명, 문항 ' + (lastItems||[]).length + '개');
   }catch(e){ console.error('[Exam-Lens] 스냅샷 복원 중 오류', e); }
 };
-
-function applyCuts(students, cuts){
-  const counts = {A:0, B:0, C:0, D:0, E:0, I:0};
-  students.forEach(s=>{
-    if(s.total==null) return;
-    if(s.total>=cuts.A) counts.A++;
-    else if(s.total>=cuts.B) counts.B++;
-    else if(s.total>=cuts.C) counts.C++;
-    else if(s.total>=cuts.D) counts.D++;
-    else if(s.total>=cuts.E) counts.E++;
-    else counts.I++;
-  });
-  return counts;
-}
-
-function recommendCuts(students, ratios){
-  // ratios: {A,B,C,D,E?} 누적 비율 — E 비율이 있으면 데이터 기반으로 E 컷도 산출
-  // ratios.E가 없으면 표준 고정값 40 사용
-  const totals = students.map(s=>s.total).filter(v=>v!=null).sort((a,b)=>b-a);
-  const n = totals.length;
-  if(n===0) return {A:90,B:80,C:70,D:60,E:40};
-  const at = (cumRatio)=>{
-    const idx = Math.min(n-1, Math.max(0, Math.round(n*cumRatio)-1));
-    return Math.round(totals[idx]*10)/10;
-  };
-  // E 컷: 비율이 명시되면 데이터 기반, 없으면 40 고정
-  let E = (ratios.E != null) ? at(ratios.A+ratios.B+ratios.C+ratios.D+ratios.E) : 40;
-  let D = at(ratios.A+ratios.B+ratios.C+ratios.D);
-  let C = at(ratios.A+ratios.B+ratios.C);
-  let B = at(ratios.A+ratios.B);
-  let A = at(ratios.A);
-  // 단조성 보정: A ≥ B ≥ C ≥ D ≥ E
-  D = Math.max(D, E);
-  C = Math.max(C, D);
-  B = Math.max(B, C);
-  A = Math.max(A, B);
-  return {A, B, C, D, E};
-}
-
-function validateCuts(cuts){
-  // A > B > C > D ≥ E 순서가 맞아야 함
-  const issues = [];
-  if(cuts.A < cuts.B) issues.push('A컷이 B컷보다 낮음');
-  if(cuts.B < cuts.C) issues.push('B컷이 C컷보다 낮음');
-  if(cuts.C < cuts.D) issues.push('C컷이 D컷보다 낮음');
-  if(cuts.D < cuts.E) issues.push('D컷이 E컷보다 낮음');
-  return issues;
-}
-
-function renderCutsChart(cuts, students){
-  destroyChart('cuts');
-  // 단조성 검증 및 자동 보정
-  const issues = validateCuts(cuts);
-  if(issues.length){
-    // 자동 보정 (낮은 등급 컷이 높은 등급 컷을 추월하지 않도록)
-    cuts.D = Math.max(cuts.D, cuts.E);
-    cuts.C = Math.max(cuts.C, cuts.D);
-    cuts.B = Math.max(cuts.B, cuts.C);
-    cuts.A = Math.max(cuts.A, cuts.B);
-    setCuts(cuts);
-  }
-  const counts = applyCuts(students, cuts);
-  const fixedCuts = {A:90,B:80,C:70,D:60,E:40};
-  const fixedCounts = applyCuts(students, fixedCuts);
-  const labels = ['A','B','C','D','E','I'];
-  // 성취도 A~E·I 공통 색상 (A=초록 상위 → I=진빨강 하위) — _LEVEL_COLOR 단일 출처
-  const colors = labels.map(l => _LEVEL_COLOR[l]);
-  const totalN = students.filter(s=>s.total!=null).length;
-
-  charts.cuts = new Chart($('cutsChart'), {
-    type:'bar',
-    plugins:[valueLabel],
-    data:{
-      labels,
-      datasets:[
-        {label:'고정 분할', data: labels.map(l=>fixedCounts[l]), backgroundColor:'rgba(148,163,184,.5)', borderRadius:4, borderSkipped:false, categoryPercentage:0.7, barPercentage:0.85},
-        {label:'시뮬레이션', data: labels.map(l=>counts[l]), backgroundColor:colors, borderRadius:6, borderSkipped:false, categoryPercentage:0.7, barPercentage:0.85}
-      ]
-    },
-    options:{
-      responsive:true, maintainAspectRatio:false,
-      animation:{duration:700, easing:'easeOutQuart'},
-      plugins:{
-        title:{display:true, text:'성취도 분포 비교 (회색=고정 / 색=시뮬레이션 — A 초록 → I 빨강)', color:'#1a1f2e', font:{size:13,weight:'600'}, padding:{bottom:6}},
-        legend:{
-          position:'bottom',
-          labels:{
-            boxWidth:14, boxHeight:14, padding:10, font:{size:11},
-            // 시뮬레이션 dataset 의 backgroundColor 가 배열이라 기본 범례는 첫 색만 노출 → 직접 6색 + 고정 회색으로 구성
-            generateLabels: () => [
-              {text:'고정 (90/80/70/60/40)', fillStyle:'rgba(148,163,184,.6)', strokeStyle:'transparent', lineWidth:0},
-              ...labels.map(l => ({text:'시뮬 '+l, fillStyle:_LEVEL_COLOR[l], strokeStyle:'transparent', lineWidth:0}))
-            ]
-          }
-        },
-        tooltip:{
-          backgroundColor:'rgba(26,31,46,.92)', titleColor:'#fff', bodyColor:'#e5e7eb', padding:10, cornerRadius:8,
-          callbacks:{label:c=>{
-            const pct = totalN? (c.raw/totalN*100).toFixed(1)+'%' : '-';
-            return `${c.dataset.label}: ${c.raw}명 (${pct})`;
-          }}
-        },
-        valueLabel:{formatter:v=>v+'명'}
-      },
-      scales:{
-        x:{grid:{display:false}},
-        y:{beginAtZero:true, ticks:{precision:0}, grid:{color:'rgba(229,232,240,.6)'},
-           suggestedMax: Math.ceil(Math.max(...labels.map(l=>Math.max(fixedCounts[l]||0, counts[l]||0)))*1.35)}
-      }
-    }
-  });
-
-  // 비교 표
-  let html = '<thead><tr><th>등급</th><th>고정</th><th>시뮬레이션</th><th>변화</th></tr></thead><tbody>';
-  labels.forEach((l,i)=>{
-    const fc = fixedCounts[l], cc = counts[l];
-    const diff = cc - fc;
-    const diffStr = diff===0?'·' : (diff>0?`+${diff}`:`${diff}`);
-    const diffColor = diff===0?'#6b7280' : (diff>0?'#059669':'#dc2626');
-    html += `<tr>
-      <td style="text-align:center;font-weight:600"><span style="display:inline-block;width:10px;height:10px;background:${colors[i]};border-radius:2px;margin-right:6px"></span>${l}</td>
-      <td style="text-align:right">${fc}명</td>
-      <td style="text-align:right;font-weight:600">${cc}명 (${totalN?(cc/totalN*100).toFixed(1):'-'}%)</td>
-      <td style="text-align:center;color:${diffColor};font-weight:600">${diffStr}</td>
-    </tr>`;
-  });
-  html += '</tbody>';
-  $('cutsCompTable').dataset.sortable = '';
-  $('cutsCompTable').innerHTML = html;
-
-  // 보정 안내 (E 컷이 추천값보다 높아 다른 컷이 끌려올라간 경우)
-  const noteBox = document.getElementById('cutsNote');
-  if(noteBox){
-    if(issues.length){
-      noteBox.innerHTML = `<div style="background:#fef3c7;color:#92400e;padding:8px 12px;border-radius:8px;font-size:12px;margin-top:8px;border-left:3px solid #f59e0b">⚠ 추천 컷이 데이터 분포상 E컷(40)보다 낮아져 자동 보정됨 (${issues.join(' / ')}). 평균이 낮은 시험에서는 일부 등급이 비게 될 수 있음.</div>`;
-    } else {
-      noteBox.innerHTML = '';
-    }
-  }
-}
-
-function setCuts(cuts){
-  $('cutA').value = cuts.A; $('cutB').value = cuts.B; $('cutC').value = cuts.C;
-  $('cutD').value = cuts.D; $('cutE').value = cuts.E;
-}
-function readCuts(){
-  return {
-    A: parseFloat($('cutA').value)||90,
-    B: parseFloat($('cutB').value)||80,
-    C: parseFloat($('cutC').value)||70,
-    D: parseFloat($('cutD').value)||60,
-    E: parseFloat($('cutE').value)||40
-  };
-}
-
-function setupCutsSimulator(students){
-  _lastStudents = students;
-  // 모든 학생에 원본 인덱스 부여 (학생 모달용)
-  students.forEach((s, i) => { s._idx = i; });
-  renderCutsChart(readCuts(), students);
-}
 
 function pearsonCorr(xs, ys){
   const n = xs.length;
@@ -4913,15 +4720,11 @@ async function run(){
     } catch(e){ console.warn('NEIS 분석 렌더링 실패', e); }
     $('review').innerHTML = buildReview(stats, itemRes, gd, grade, subject, examName, students, alpha);
 
-    // 분할점수 시뮬레이터 + 학기 환산 분석
-    setupCutsSimulator(students);
-
      // 모든 메인 표에 정렬 기능 부여
     makeSortable($('itemTable'));
     makeSortable($('studentTable'));
     makeSortable($('gradeTable'));
     makeSortable($('distTable'));
-    makeSortable($('cutsCompTable'));
 
     $('result').classList.remove('hidden');
     // 헤더 PDF/HTML 저장 버튼 활성화
@@ -5041,29 +4844,6 @@ $('file').addEventListener('change', async e=>{
 });
 document.querySelectorAll('.filters button').forEach(b=>{
   b.addEventListener('click', ()=>{ lastFilter=b.dataset.f; renderItemTable(lastItems, lastFilter, _lastStudents); });
-});
-
-// 분할점수 모드 버튼
-document.querySelectorAll('.cuts-mode').forEach(btn=>{
-  btn.addEventListener('click', ()=>{
-    if(!_lastStudents) return;
-    document.querySelectorAll('.cuts-mode').forEach(b=>b.classList.remove('active'));
-    btn.classList.add('active');
-    const mode = btn.dataset.mode;
-    if(mode==='fixed') setCuts({A:90,B:80,C:70,D:60,E:40});
-    else if(mode==='recommend') setCuts(recommendCuts(_lastStudents, {A:0.10, B:0.25, C:0.30, D:0.25, E:0.10}));
-    else if(mode==='balanced') setCuts(recommendCuts(_lastStudents, {A:0.15, B:0.25, C:0.25, D:0.25, E:0.10}));
-    // custom 모드는 입력값 그대로
-    if(mode!=='custom') renderCutsChart(readCuts(), _lastStudents);
-  });
-});
-$('cutsApply').addEventListener('click', ()=>{
-  if(_lastStudents) renderCutsChart(readCuts(), _lastStudents);
-});
-['cutA','cutB','cutC','cutD','cutE'].forEach(id=>{
-  $(id).addEventListener('change', ()=>{
-    if(_lastStudents) renderCutsChart(readCuts(), _lastStudents);
-  });
 });
 
 
