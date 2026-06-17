@@ -4083,7 +4083,7 @@ function drawNeisCharts(items){
       options: {
         responsive:true, maintainAspectRatio:false,
         plugins: {
-          title: { display:true, text:'의도 난이도 × 실제 정답률 (점=문항, 색=의도 난이도)', color:'#1a1f2e', font:{size:13.5,weight:'600'}, padding:{bottom:10} },
+          title: { display:true, text:'의도 난이도 × 실제 정답률 (점=문항, 색=의도 난이도, 가로선=그룹 평균)', color:'#1a1f2e', font:{size:13.5,weight:'600'}, padding:{bottom:10} },
           legend: { display:true, position:'bottom', labels:{ boxWidth:14, padding:12, font:{size:11.5} } },
           tooltip: {
             backgroundColor:'rgba(26,31,46,.92)', titleColor:'#fff', bodyColor:'#e5e7eb',
@@ -4095,7 +4095,9 @@ function drawNeisCharts(items){
         scales: {
           x: { type:'category', labels: intents,
                title:{display:true,text:'출제 의도',color:'#475569'},
-               grid:{display:false} },
+               grid:{display:false},
+               offset:true,
+               ticks:{ padding:12 } },
           y: { min:0, max:100,
                title:{display:true,text:'실제 정답률 (%)',color:'#475569'},
                ticks:{callback:(v)=>v+'%'}, grid:{color:'rgba(229,232,240,.6)'} }
