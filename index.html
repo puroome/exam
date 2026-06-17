@@ -527,12 +527,11 @@
     body.printing-report #printReport { display: block !important; }
 
     /* 직접 Ctrl+P 등 fallback 경로: 화면 DOM 그대로 인쇄하되 노이즈만 제거 */
-    body:not(.printing-report) header,
+body:not(.printing-report) header,
     body:not(.printing-report) .no-print,
     body:not(.printing-report) #setup,
     body:not(.printing-report) .qmodal,
     body:not(.printing-report) footer,
-    body:not(.printing-report) #privacyNotice,
     body:not(.printing-report) #aiNotice,
     body:not(.printing-report) #printReport { display: none !important; }
     body:not(.printing-report) .card { break-inside: avoid; page-break-inside: avoid; }
@@ -610,43 +609,6 @@
 </header>
 
 <main>
-  <section class="card no-print" id="privacyNotice" style="background:linear-gradient(135deg,#ecfdf5,#d1fae5);border:1px solid #6ee7b7;border-left:4px solid #10b981">
-    <h2 style="color:#065f46;margin:0 0 10px;display:flex;align-items:center;gap:10px">
-      <span style="font-size:20px">🔒</span>
-      <span>개인정보 보호 안내</span>
-      <span style="font-size:11px;font-weight:600;background:#10b981;color:#fff;padding:3px 9px;border-radius:8px;letter-spacing:.02em">100% 로컬 처리</span>
-    </h2>
-    <div style="font-size:13px;color:#064e3b;line-height:1.7">
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:10px 18px;margin-bottom:10px">
-        <div style="display:flex;gap:8px"><span style="color:#10b981;font-weight:700">✓</span><span>업로드한 NEIS 엑셀·PDF는 <b>브라우저 안에서만 처리</b>되며 어떠한 서버로도 전송되지 않습니다.</span></div>
-        <div style="display:flex;gap:8px"><span style="color:#10b981;font-weight:700">✓</span><span>학생 이름·성적 등 <b>개인정보는 외부 저장·공유·로그 어디에도 남지 않습니다.</b></span></div>
-        <div style="display:flex;gap:8px"><span style="color:#10b981;font-weight:700">✓</span><span>탭을 닫으면 모든 데이터가 사라집니다. 결과 저장은 사용자의 PC로 직접 다운로드 됩니다.</span></div>
-        <div style="display:flex;gap:8px"><span style="color:#10b981;font-weight:700">✓</span><span>학생 이름 가리기(익명화) 옵션을 통해 인쇄·공유 시 익명 처리 가능.</span></div>
-      </div>
-      <details style="margin-top:8px;background:#fff;border:1px solid #a7f3d0;border-radius:10px;padding:10px 14px">
-        <summary style="cursor:pointer;font-weight:600;color:#065f46;font-size:12.5px;user-select:none">📋 학습지원 소프트웨어 심의 관련 안내 (펼쳐보기)</summary>
-        <div style="margin-top:10px;font-size:12.5px;line-height:1.75;color:#064e3b">
-          <p style="margin:0 0 8px"><b>초·중등교육법 제29조의2(’25.8.14. 신설)</b>에 따른 학습지원 소프트웨어 심의 대상 여부는 다음 두 조건 중 하나 이상 충족 시 적용됩니다.</p>
-          <ol style="margin:0 0 10px 18px;padding:0">
-            <li>학생들의 개인정보를 <b>수집·이용·제공 등 처리</b>하는 소프트웨어</li>
-            <li>교과 성취기준과 관련된 <b>학습콘텐츠를 포함</b>하며, <b>콘텐츠 제공 기관이 학교 교육과정 운영 지원 목적으로 개발·보급</b>하는 소프트웨어</li>
-          </ol>
-          <p style="margin:0 0 6px"><b>Exam-Lens 검토 결과</b></p>
-          <table style="width:100%;border-collapse:collapse;font-size:12px;background:#f0fdf4;border-radius:8px;overflow:hidden">
-            <thead>
-              <tr style="background:#10b981;color:#fff"><th style="padding:6px 10px;text-align:left">조건</th><th style="padding:6px 10px;text-align:center;width:80px">해당</th><th style="padding:6px 10px;text-align:left">근거</th></tr>
-            </thead>
-            <tbody>
-              <tr><td style="padding:7px 10px;border-bottom:1px solid #d1fae5;vertical-align:top">① 개인정보 처리</td><td style="padding:7px 10px;text-align:center;color:#dc2626;font-weight:700;border-bottom:1px solid #d1fae5">비해당</td><td style="padding:7px 10px;border-bottom:1px solid #d1fae5;vertical-align:top">파일은 사용자 브라우저 내부에서만 처리. 외부 송신·서버 저장·로그 보관 없음. 결과는 사용자 PC로 직접 저장.</td></tr>
-              <tr><td style="padding:7px 10px;vertical-align:top">② 교과 성취기준 학습콘텐츠 + 기관 보급</td><td style="padding:7px 10px;text-align:center;color:#dc2626;font-weight:700">비해당</td><td style="padding:7px 10px;vertical-align:top">학생용 학습 콘텐츠 없음. 교사가 평가 결과를 분석하기 위한 <b>교사 업무 보조 도구</b>이며, 콘텐츠 제공 기관에 의한 보급 구조 아님.</td></tr>
-            </tbody>
-          </table>
-          <p style="margin:10px 0 0;color:#065f46"><b>결론</b>: Exam-Lens는 두 조건 모두 비해당하므로 <b>학습지원 소프트웨어 심의 대상이 아닙니다.</b> 다만 학교 내 사용 시 학교장께 사용 사실을 안내·확인하시면 더 안전합니다.</p>
-          <p style="margin:6px 0 0;color:#6b7280;font-size:11.5px">※ 본 안내는 공개된 법령·지침을 토대로 한 일반적 설명이며, 최종 판단은 소속 교육청·학교의 운영 지침에 따라야 합니다.</p>
-        </div>
-      </details>
-    </div>
-  </section>
 
   <section class="card no-print" id="setup">
     <h2 onclick="toggleSetup()" style="cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:10px">
@@ -3541,14 +3503,6 @@ function saveHtml(){
     setupNext = setupCard.nextSibling;
     setupParent.removeChild(setupCard);
   }
-  // [개인정보 보호 안내] 카드도 저장본에서 제거 — 라이브 앱 안내용
-  const privacyCard = document.getElementById('privacyNotice');
-  let privacyParent = null, privacyNext = null;
-  if(privacyCard){
-    privacyParent = privacyCard.parentNode;
-    privacyNext = privacyCard.nextSibling;
-    privacyParent.removeChild(privacyCard);
-  }
 
   // 외부 CDN 스크립트(Chart.js 등)는 그대로 유지 — 저장 HTML 열 때 차트를 데이터로 다시 그리기 위함.
   // 캔버스도 비우지 않고 직렬화 — 페이지 로드 후 snapshot 스크립트가 drawCharts() 로 다시 그림.
@@ -3632,11 +3586,6 @@ function saveHtml(){
   if(setupCard && setupParent){
     if(setupNext) setupParent.insertBefore(setupCard, setupNext);
     else setupParent.appendChild(setupCard);
-  }
-  // privacy 안내 카드 원래 위치로 복귀
-  if(privacyCard && privacyParent){
-    if(privacyNext) privacyParent.insertBefore(privacyCard, privacyNext);
-    else privacyParent.appendChild(privacyCard);
   }
 
   // 파일명 — [학년_과목명_시험명_문항분석결과(날짜)].html
