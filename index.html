@@ -757,11 +757,11 @@
     </h2>
     <div id="setupBody" style="overflow:hidden;transition:max-height .35s var(--ease), opacity .25s var(--ease);max-height:2000px">
     <div style="background:linear-gradient(135deg,#e0ecff,#dbeafe);border-left:4px solid var(--pri);padding:10px 14px;margin-bottom:14px;font-size:13px;color:var(--ink-2);border-radius:10px;font-weight:500">
-      📥 <b style="color:var(--pri-deep)">다운로드 경로</b>: NEIS → 성적 → 지필평가조회 → 교과목별학생답정오표 → <b>[XLS data]</b> 저장
+      📥 <b style="color:var(--pri-deep)">다운로드 경로</b>: NEIS → 성적 → 정기시조회 → 교과목별학생답정오표 → <b>[XLS data]</b> 저장
     </div>
     <div class="row">
       <div style="flex:2">
-        <label>교과목별학생답정오표 (.xlsx, .xls) — 학급별 여러 파일 선택 가능</label>
+        <label>교과목별학생답정오표 (.xlsx, .xls) — 복수학급 선택 가능</label>
         <input type="file" id="file" accept=".xlsx,.xls" multiple>
         <div id="fileList" style="margin-top:6px;font-size:12px;color:var(--muted)"></div>
       </div>
@@ -775,11 +775,11 @@
       </div>
       <div>
         <label>과목명</label>
-        <input type="text" id="subject" placeholder="예: 통합사회">
+        <input type="text" id="subject" placeholder="예: 공통영어1">
       </div>
       <div>
         <label>시험명</label>
-        <input type="text" id="examName" placeholder="예: 1학기 중간고사">
+        <input type="text" id="examName" placeholder="예: 1학기 1차시험">
       </div>
     </div>
     <div class="row" style="margin-top:10px">
@@ -832,14 +832,14 @@
     <div style="margin-top:14px;padding:12px 14px;background:#f8faff;border:1px solid var(--line);border-radius:12px">
       <div style="font-size:12.5px;font-weight:600;color:var(--ink-2);margin-bottom:8px">📋 학기말 환산 비율 (선택사항 · 학기 환산 분석용)</div>
       <div class="row" style="gap:10px">
-        <div><label>중간 비율(%)</label><input type="number" id="midRatio" value="30" min="0" max="100" step="1"></div>
-        <div><label>기말 비율(%)</label><input type="number" id="finalRatio" value="30" min="0" max="100" step="1"></div>
+        <div><label>1차 비율(%)</label><input type="number" id="midRatio" value="30" min="0" max="100" step="1"></div>
+        <div><label>2차 비율(%)</label><input type="number" id="finalRatio" value="30" min="0" max="100" step="1"></div>
         <div><label>수행 비율(%)</label><input type="number" id="performRatio" value="40" min="0" max="100" step="1"></div>
         <div><label>수행평가 평균 <span style="color:var(--muted);font-weight:400">(만점=수행 비율, 권장 90%)</span></label><input type="number" id="performMean" value="36" min="0" max="100" step="0.1"></div>
         <div><label>이번 평가 종류</label>
           <select id="examType">
-            <option value="mid">중간고사</option>
-            <option value="final">기말고사</option>
+            <option value="mid">1차시험</option>
+            <option value="final">2차시험</option>
           </select>
         </div>
       </div>
@@ -915,7 +915,7 @@
     </section>
 
     <section class="card">
-      <h2>학기말 환산 점수 분석<span class="tip" data-tip="학기말 점수 = 중간×비율 + 기말×비율 + 수행평가&#10;·이번 평가가 학기 환산 평균에 얼마나 기여하는지 계산&#10;·다른 시험(중간 또는 기말) 평균에 따라 학기 환산 평균이 어떻게 변하는지 시나리오 표로 제공&#10;·적정 학기 평균(70/75/80점) 목표 시 다른 시험 필요 평균을 역산해 출제 방향 권고">?</span></h2>
+      <h2>학기말 환산 점수 분석<span class="tip" data-tip="학기말 점수 = 1차×비율 + 2차×비율 + 수행평가&#10;·이번 평가가 학기 환산 평균에 얼마나 기여하는지 계산&#10;·다른 시험(1차 또는 2차) 평균에 따라 학기 환산 평균이 어떻게 변하는지 시나리오 표로 제공&#10;·적정 학기 평균(70/75/80점) 목표 시 다른 시험 필요 평균을 역산해 출제 방향 권고">?</span></h2>
       <p style="color:var(--muted);margin:0 0 12px;font-size:13px">위 [학기말 환산 비율] 입력 기준 · 이번 평가가 학기말 점수에 얼마나 기여하는지, 적정 평균을 위한 기말 평균 권고 산출</p>
       <div id="finalScoreAnalysis"></div>
     </section>
@@ -1923,8 +1923,8 @@ function renderFinalScoreAnalysis(stats){
 
   const myRatio = examType==='mid'? midR : finR;
   const otherExamRatio = examType==='mid'? finR : midR;
-  const otherExamLabel = examType==='mid'? '기말' : '중간';
-  const myLabel = examType==='mid'? '중간' : '기말';
+  const otherExamLabel = examType==='mid'? '1차' : '2차';
+  const myLabel = examType==='mid'? '1차' : '2차';
   const myContribution = examMean * (myRatio/100);
 
   html += `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-bottom:16px">
@@ -2644,7 +2644,7 @@ function buildReview(stats, items, gd, grade, subject, examName, students, alpha
     neisSection = buildNeisReviewSection(items);
   }
 
-  const head = `<h3>${grade}학년 · ${escHTML(subject||'과목')} · ${escHTML(examName||'중간고사')} 결과 분석</h3>`;
+  const head = `<h3>${grade}학년 · ${escHTML(subject||'과목')} · ${escHTML(examName||'1차시험')} 결과 분석</h3>`;
   return head
     + `<h3>1. 평균 및 성취도 해석</h3>` + narrative + classTable
     + `<h3>2. 문항 분석 및 대책</h3>` + itemTable
