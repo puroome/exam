@@ -1501,7 +1501,7 @@ window.__restoreExamLensSnapshot = function(snap){
 
     // 차트/표를 원본 데이터로 다시 렌더링 — PNG 스냅샷이 아닌 인터랙티브 차트
     if(_lastStudents && lastItems && lastItems.length){
-      const grade = +(_form.grade || ($('grade') && $('grade').value)) || 1;
+      const grade = +(_form.grade || ($('grade') && $('grade').dataset.gradeNum)) || 1;
       const subject = (_form.subject || ($('subject') && $('subject').value) || '').trim();
       const examName = (_form.examName || ($('examName') && $('examName').value) || '').trim();
       const anon = (_form.anon != null) ? !!_form.anon : !!($('anon') && $('anon').checked);
@@ -3520,7 +3520,7 @@ function saveHtml(){
   //   카드를 떼고 나서 캡처하면 $('grade').value 가 null 이 되어 스냅샷이 9등급(기본 폴백)으로 박힘.
   //   라이브 페이지의 스냅샷 스크립트 실행과 저장된 파일 재로딩 모두에 영향.
   const _snapForm = {
-    grade: ($('grade') && $('grade').value) || '',
+    grade: ($('grade') && $('grade').dataset.gradeNum) || '',
     subject: ($('subject') && $('subject').value) || '',
     examName: ($('examName') && $('examName').value) || '',
     anon: !!($('anon') && $('anon').checked),
@@ -4945,9 +4945,13 @@ async function run(){
         items = parsed.items;
         // 첫 파일에서 시험 정보 자동 입력 (항상 덮어쓰기)
         const info = parseExamInfo(rows);
-        if(info.grade && [1,2,3].includes(info.grade)) $('grade').value = String(info.grade);
-        if(info.subject) $('subject').value = info.subject;
-        if(info.examName) $('examName').value = info.examName;
+        if(info.grade && [1,2,3].includes(info.grade)){
+        const labels = {1:'1학년 (5등급제)', 2:'2학년 (5등급제)', 3:'3학년 (9등급제)'};
+        $('grade').value = labels[info.grade] || '';
+        $('grade').dataset.gradeNum = String(info.grade);
+      }
+      if(info.subject) $('subject').value = info.subject;
+      if(info.examName) $('examName').value = info.examName;
       }else{
         // verify item consistency (qno + answer + points)
         if(parsed.items.length !== items.length)
@@ -5000,7 +5004,7 @@ async function run(){
     $('fileList').innerHTML = `<div style="background:#dcfce7;color:#166534;padding:8px 12px;border-radius:9px;font-size:12.5px;margin-top:6px;font-weight:500">✓ 병합 완료: ${fileLog.join(', ')} · 총 <b>${students.length}명</b></div>`;
 
     // 시험 정보 보강 후 최종값 읽기
-    const grade = +$('grade').value;
+    const grade = parseInt($('grade').dataset.gradeNum || '1');
     const subject = $('subject').value.trim();
     const examName = $('examName').value.trim();
 
@@ -5077,6 +5081,15 @@ async function run(){
     selectedFiles = [];
     renderFileList();
     $('file').value = '';
+    // 문항정보표 + 학년/과목명/시험명 초기화
+    const neisFileInput2 = $('neisFile');
+    if(neisFileInput2) neisFileInput2.value = '';
+    const nstat2 = $('neisStatus');
+    if(nstat2) nstat2.innerHTML = 'NEIS에서 다운받은 문항정보표 엑셀을 업로드하면 출제 의도 대비 결과 분석과 성취기준별 분석이 추가됩니다. <b>분석 대상은 선택형 문항만</b> (서답형은 정답이 별도관리되어 제외).';
+    $('grade').value = '';
+    $('grade').dataset.gradeNum = '';
+    $('subject').value = '';
+    $('examName').value = '';
     window.scrollTo({top:$('result').offsetTop-10, behavior:'smooth'});
     // 완료 토스트
     showToast(`✓ 분석 완료 — ${stats.n}명 응시`, 'success');
