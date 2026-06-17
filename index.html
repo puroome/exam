@@ -2566,6 +2566,11 @@ document.addEventListener('click', e=>{
     const navH = document.getElementById('resultNav')?.offsetHeight || 0;
     const top = el.getBoundingClientRect().top + window.pageYOffset - navH - 16;
     window.scrollTo({top, behavior:'smooth'});
+    // 클릭한 메뉴를 즉시 active로 표시 — 스크롤 변화가 거의 없어 scroll 이벤트가
+    // 충분히 발생하지 않는 경우(예: 마지막 메뉴가 이미 화면 하단 근처일 때)에도
+    // 활성화 표시가 누락되지 않도록 보강.
+    document.querySelectorAll('#resultNav .nav-link').forEach(l => l.classList.toggle('active', l === link));
+    setTimeout(_updateNavActive, 400);
   }
 });
 // 스크롤 시 active 표시
@@ -2581,6 +2586,13 @@ function _updateNavActive(){
     const top = target.getBoundingClientRect().top - navH;
     if(top <= 0) activeId = l.dataset.target;
   });
+  // 페이지 맨 아래까지 스크롤된 경우, 마지막 메뉴를 강제로 활성화.
+  // (마지막 섹션이 짧으면 그 top이 navH 기준선을 넘어서지 못해 끝까지
+  //  스크롤해도 이전 메뉴가 active로 남는 문제 보정)
+  if((window.innerHeight + window.scrollY) >= document.documentElement.scrollHeight - 2){
+    const visible = Array.from(links).filter(l => l.offsetParent);
+    if(visible.length) activeId = visible[visible.length - 1].dataset.target;
+  }
   links.forEach(l => l.classList.toggle('active', l.dataset.target === activeId));
 }
 window.addEventListener('scroll', _updateNavActive, {passive:true});
