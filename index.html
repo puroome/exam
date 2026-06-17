@@ -3059,6 +3059,7 @@ function _extractPageNumsFromFooter(processedItems, W, H){
     /(?:^|\s)(\d+)\s*\/\s*\d+/g,
     /-\s*(\d+)\s*-/g,
     /(?:^|\s)pp?\.?\s*(\d+)/gi,
+    /\[\s*(\d+)\s*-\s*\d+\s*\]/g,   // ponytail: "[N-M]"쪽 형식(예: [1-5]) — 학교 양식별 헤더 쪽번호 표기
   ];
   const result = []; // {x, num, y}
   Object.values(lines).forEach(items => {
@@ -3117,12 +3118,6 @@ async function processOriginalPDFTextBased(file, statusEl){
 
     const tc = await page.getTextContent();
     totalTokens += tc.items.length;
-    console.log(`[DEBUG] page${p}: tc.items.length=${tc.items.length}`);
-    if(p===3 || p===1){
-      tc.items.slice(0,15).forEach((it,i)=>{
-        console.log(`[DEBUG] page${p} item${i}: str=${JSON.stringify(it.str)} transform=${JSON.stringify(it.transform)}`);
-      });
-    }
     const qnums = [];
     const allTextItems = []; // 페이지 내 모든 텍스트 아이템 (컬럼 우측 경계 계산용)
     // 인접 토큰(같은 라인) 기반 검색을 위해 처리된 아이템 배열 미리 구성
@@ -3183,7 +3178,6 @@ async function processOriginalPDFTextBased(file, statusEl){
     const bodyH = bodySize ? parseInt(bodySize[0]) : 14;
     const qMinH = Math.max(8, bodyH * 0.85);   // 문항 번호 최소 — 본문과 동일 이상 (booklet 축소판 대비)
     const qMaxH = bodyH * 3.5;
-    console.log(`[DEBUG] page${p}: sizeHist=${JSON.stringify(sizeHist)} bodyH=${bodyH} qMinH=${qMinH} qMaxH=${qMaxH}`);
 
     processedItems.forEach((it, idx)=>{
       const x = it.x, y = it.y, fontH = it.fontH, s = it.str, w = it.w;
@@ -3197,9 +3191,6 @@ async function processOriginalPDFTextBased(file, statusEl){
       }
       // 객관식 번호: "N." 또는 "N. 다음..."
       let m = s.match(QNUM_RE) || s.match(QNUM_INLINE_RE);
-      if(m){
-        console.log(`[DEBUG] page${p} 문항번호 패턴 매칭: "${s}" fontH=${fontH} range=[${qMinH},${qMaxH}] pass=${fontH >= qMinH && fontH <= qMaxH}`);
-      }
       if(m && fontH >= qMinH && fontH <= qMaxH){
         const qno = parseInt(m[1]);
         if(qno >= 1 && qno <= 30){
