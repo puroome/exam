@@ -599,7 +599,7 @@ body:not(.printing-report) header,
     </div>
     <div class="header-actions no-print" style="display:flex;gap:8px;flex-shrink:0">
       <button class="hdr-btn" id="hdrBtnPrint" onclick="openPrintOptions()" title="보고서 양식으로 PDF 출력/인쇄 — 구성·옵션 선택 가능" disabled>
-        <span class="ico">🖨</span><span>PDF / 인쇄</span>
+        <span class="ico">🖨</span><span>PDF / 인쇄</span>ㅇㅇ
       </button>
       <button class="hdr-btn" id="hdrBtnSave" onclick="saveHtml()" title="현재 분석 결과를 HTML 파일로 저장" disabled>
         <span class="ico">💾</span><span>HTML 저장</span>
@@ -612,8 +612,8 @@ body:not(.printing-report) header,
 
   <section class="card no-print" id="setup">
     <h2 onclick="toggleSetup()" style="cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:10px">
-      <span style="display:flex;align-items:center;gap:10px">1. 파일 업로드 및 설정</span>
-      <span id="setupToggle" style="font-size:12px;font-weight:600;color:var(--pri);background:var(--pri-50);padding:4px 10px;border-radius:8px;transition:all .2s var(--ease);user-select:none">접기 ▲</span>
+      파일 업로드 및 설정
+      <span id="setupToggle" style="font-size:12px;font-weight:600;color:var(--pri);background:var(--pri-50);padding:4px 10px;border-radius:8px;transition:all .2s var(--ease);user-select:none;flex-shrink:0">접기 ▲</span>
     </h2>
     <div id="setupBody" style="overflow:hidden;transition:max-height .35s var(--ease), opacity .25s var(--ease);max-height:2000px">
     <div style="background:linear-gradient(135deg,#e0ecff,#dbeafe);border-left:4px solid var(--pri);padding:10px 14px;margin-bottom:14px;font-size:13px;color:var(--ink-2);border-radius:10px;font-weight:500">
