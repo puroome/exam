@@ -39,7 +39,7 @@
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
 <link rel="preconnect" href="https://unpkg.com" crossorigin>
-<link rel="icon" type="image/png" href="icon.png">
+
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <style>
   :root {
@@ -694,10 +694,8 @@
 
 <header>
   <div style="position:relative;z-index:1;display:flex;align-items:center;gap:16px;max-width:1320px;margin:0 auto">
-    <div class="icon-wrap"><img src="icon.png" alt="Exam Lens"></div>
     <div style="flex:1">
-      <h1>Exam-Lens · <span style="font-weight:700">정기시험 결과 문항분석 프로그램</span></h1>
-      <div class="sub">제작 · <b>산남고 이성훈</b> <a href="mailto:ming0987@naver.com" style="color:rgba(255,255,255,.88);text-decoration:none;border-bottom:1px dotted rgba(255,255,255,.55);margin-left:6px">(ming0987@naver.com)</a></div>
+      <h1>정기시험 결과 분석</h1>
     </div>
     <div class="header-actions no-print" style="display:flex;gap:8px;flex-shrink:0">
       <button class="hdr-btn" id="hdrBtnPrint" onclick="openPrintOptions()" title="보고서 양식으로 PDF 출력/인쇄 — 구성·옵션 선택 가능" disabled>
@@ -1181,12 +1179,8 @@
 
 <div id="toast" role="status" aria-live="polite"></div>
 
-<footer style="text-align:center;padding:28px 20px 36px;color:var(--muted);font-size:12px;letter-spacing:.02em">
-  <div style="display:inline-flex;align-items:center;gap:10px;padding:10px 20px;background:#fff;border:1.5px solid var(--pri-100);border-radius:999px;box-shadow:var(--shadow-blue)">
-    <img src="icon.png" alt="" style="width:22px;height:22px;border-radius:6px;object-fit:contain">
-    <span>Exam-Lens · 제작 <b style="color:var(--pri-deep)">산남고 이성훈</b> <a href="mailto:ming0987@naver.com" style="color:var(--muted);text-decoration:none;border-bottom:1px dotted var(--line);margin-left:4px">(ming0987@naver.com)</a></span>
-  </div>
-</footer>
+
+
 
 <script>
 const $ = id => document.getElementById(id);
@@ -4747,7 +4741,7 @@ function buildPrintReport(opts){
   // ===== 표지 =====
   html += `<section class="pr-page pr-cover">
     <h1 class="pr-title">정기시험 문항 분석 보고서</h1>
-    <div class="pr-cover-sub">Exam-Lens · 자동 생성 분석 보고서</div>
+    <div class="pr-cover-sub">자동 생성 분석 보고서</div>
     <dl>
       <dt>학 년</dt><dd>${grade}학년</dd>
       <dt>과 목</dt><dd>${escHTML(subject || '-')}</dd>
@@ -4757,7 +4751,6 @@ function buildPrintReport(opts){
       <dt>최고 / 최저</dt><dd>${stats.max}점 / ${stats.min}점</dd>
       ${alpha!=null?`<dt>신뢰도 α</dt><dd>${alpha.toFixed(3)}</dd>`:''}
       <dt>발 행 일</dt><dd>${dateStr}</dd>
-      <dt>작 성</dt><dd>산남고 이성훈 · Exam-Lens</dd>
     </dl>
     <p class="pr-note" style="margin-top:16mm">본 보고서는 분석 시점의 결과를 자동 생성한 문서이며, 개별 학생 식별 정보는 익명 모드 설정에 따릅니다.${anon?' (현재 익명 모드 활성)':''}</p>
   </section>`;
@@ -5038,7 +5031,7 @@ function buildPrintReport(opts){
   }
 
   // ===== 푸터 =====
-  html += `<div class="pr-footer">Exam-Lens · 산남고 이성훈 · 출력 ${now.toLocaleString('ko-KR')}</div>`;
+  html += `<div class="pr-footer">정기시험 결과 분석 · 출력 ${now.toLocaleString('ko-KR')}</div>`;
 
   return html;
 }
@@ -6571,11 +6564,11 @@ async function run(){
 
       if(items===null){
         items = parsed.items;
-        // 첫 파일에서 시험 정보 보강 (사용자가 비워둔 경우만)
+        // 첫 파일에서 시험 정보 자동 입력 (항상 덮어쓰기)
         const info = parseExamInfo(rows);
         if(info.grade && [1,2,3].includes(info.grade)) $('grade').value = String(info.grade);
-        if(info.subject && !$('subject').value.trim()) $('subject').value = info.subject;
-        if(info.examName && !$('examName').value.trim()) $('examName').value = info.examName;
+        if(info.subject) $('subject').value = info.subject;
+        if(info.examName) $('examName').value = info.examName;
       }else{
         // verify item consistency (qno + answer + points)
         if(parsed.items.length !== items.length)
@@ -6792,8 +6785,8 @@ $('file').addEventListener('change', async e=>{
       const info = parseExamInfo(rows);
       const detected = [];
       if(info.grade && [1,2,3].includes(info.grade)){ $('grade').value=String(info.grade); detected.push(`${info.grade}학년`); }
-      if(info.subject && !$('subject').value.trim()){ $('subject').value=info.subject; detected.push(`과목: ${info.subject}`); }
-      if(info.examName && !$('examName').value.trim()){ $('examName').value=info.examName; detected.push(`시험명: ${info.examName}`); }
+      if(info.subject){ $('subject').value=info.subject; detected.push(`과목: ${info.subject}`); }
+      if(info.examName){ $('examName').value=info.examName; detected.push(`시험명: ${info.examName}`); }
       window._examInfoMsg = detected.length ? detected.join(' / ') : '';
     }catch(e){ /* 무시 */ }
   }
