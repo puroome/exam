@@ -623,7 +623,7 @@ body:not(.printing-report) header,
     </div>
     <div class="row">
       <div style="flex:2">
-        <label>교과목별학생답정오표 (.xlsx, .xls) — 복수학급 선택 가능</label>
+        <label>교과목별학생답정오표 (복수학급 선택 가능)</label>
         <input type="file" id="file" accept=".xlsx,.xls" multiple>
         <div id="fileList" style="margin-top:6px;font-size:12px;color:var(--muted)"></div>
       </div>
@@ -647,9 +647,8 @@ body:not(.printing-report) header,
 
     <div class="row" style="margin-top:10px">
       <div style="flex:1">
-        <label>📋 NEIS 문항정보표 (선택사항) — <span style="color:var(--muted);font-weight:400">의도 난이도 · 성취기준 · 내용영역 분석용</span></label>
+        <label>NEIS 문항정보표 (선택사항)</label>
         <input type="file" id="neisFile" accept=".xlsx,.xls">
-        <div id="neisStatus" style="margin-top:6px;font-size:12px;color:var(--muted)">NEIS에서 다운받은 문항정보표 엑셀을 업로드하면 출제 의도 대비 결과 분석과 성취기준별 분석이 추가됩니다. <b>분석 대상은 선택형 문항만</b> (서답형은 정답이 별도관리되어 제외).</div>
       </div>
     </div>
 
@@ -675,7 +674,7 @@ body:not(.printing-report) header,
     </div>
     <div style="margin-top:14px">
       <button id="run">분석 시작</button>
-      <span style="color:var(--muted);font-size:12px;margin-left:10px">· PDF·HTML 저장은 우측 상단 버튼으로 가능합니다</span>
+      <span style="color:var(--muted);font-size:12px;margin-left:10px">· 분석자료는 PDF·HTML 파일로 저장가능합니다. (우측 상단 버튼)</span>
     </div>
     <div id="err" class="err hidden"></div>
     </div><!-- /#setupBody -->
