@@ -1,6 +1,6 @@
 {
   "name": "정기시험 성적분석",
-  "short_name": "test-log",
+  "short_name": "성적분석",
   "description": "정기시험 성적분석",
   "start_url": "./index.html",
   "display": "standalone",

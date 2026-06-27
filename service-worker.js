@@ -1,4 +1,4 @@
-const CACHE_NAME = 'exam-supervisor-app-v1';
+const CACHE_NAME = 'exam-exam-app-v1';
 
 self.addEventListener('install', () => {
   self.skipWaiting();
